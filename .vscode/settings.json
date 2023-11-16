@@ -1,0 +1,8 @@
+{
+    "java.project.referencedLibraries": [
+        "c:\\jogl25\\jar\\jogl-all.jar",
+        "c:\\jogl25\\jar\\gluegen-rt.jar"
+    ],
+    //"java.project.sourcePaths": ["src"],
+    //"java.project.outputPath": "bin"
+}
