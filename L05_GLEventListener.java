@@ -59,7 +59,7 @@ public class L05_GLEventListener implements GLEventListener {
   /* Clean up memory */
   public void dispose(GLAutoDrawable drawable) {
     GL3 gl = drawable.getGL().getGL3();
-    container.dispose(gl);
+    //container.dispose(gl);
     room.dispose(gl);
     lights[0].dispose(gl);
     lights[1].dispose(gl);
@@ -82,8 +82,8 @@ public class L05_GLEventListener implements GLEventListener {
     textures = new TextureLibrary();
     textures.add(gl, "container_diffuse", "textures/container2.jpg");
     textures.add(gl, "container_specular", "textures/container2_specular.jpg");
-    textures.add(gl, "chequerboard", "textures/chequerboard.jpg");
-    textures.add(gl, "cloud", "textures/cloud.jpg");
+    textures.add(gl, "snowyLower", "textures/snowyLower.jpg");
+    textures.add(gl, "snowyUpper", "textures/snowyUpper.jpg");
   }
 
   public void initialise(GL3 gl) {
@@ -92,43 +92,46 @@ public class L05_GLEventListener implements GLEventListener {
 
     lights[0] = new Light(gl);
     lights[0].setCamera(camera);
+    lights[0].setPosition(getLight0Position());
+
     lights[1] = new Light(gl);
     lights[1].setCamera(camera);
-    room = new Room(gl, camera, lights, textures.get("chequerboard"), textures.get("cloud"));
-    container = new Container(gl, camera, lights, textures.get("container_diffuse"), textures.get("container_specular"));
+    lights[1].setPosition(getLight1Position());
+
+    room = new Room(gl, camera, lights, textures.get("snowyLower"), textures.get("snowyUpper"));
+    //container = new Container(gl, camera, lights, textures.get("container_diffuse"), textures.get("container_specular"));
   }
   
   public void render(GL3 gl) {
     gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
-    lights[0].setPosition(getLight0Position());  // changing light position each frame
+                          // changing light position each frame
     lights[0].render(gl);
-
-    lights[1].setPosition(getLight1Position());  // changing light position each frame
+                          // changing light position each frame
     lights[1].render(gl);
     
-    for (int i=0; i<100; ++i) {
-      container.setModelMatrix(getModelMatrix(i));
-      container.render(gl);
-    }
+    // for (int i=0; i<100; ++i) {
+    //   container.setModelMatrix(getModelMatrix(i));
+    //   container.render(gl);
+    // }
     
     room.render(gl);
   }
   
   // The light's position is continually being changed, so needs to be calculated for each frame.
   private Vec3 getLight0Position() {
-    double elapsedTime = getSeconds()-startTime;
-    float x = 8.0f*(float)(Math.sin(Math.toRadians(elapsedTime*50)));
-    float y = 3.4f;
-    float z = 5.0f*(float)(Math.cos(Math.toRadians(elapsedTime*50)));
+    //double elapsedTime = getSeconds()-startTime;
+    float x = -2.0f;//8.0f*(float)(Math.sin(Math.toRadians(elapsedTime*50)));
+    float y = 12.0f;//3.4f;
+    float z = 2.0f;//5.0f*(float)(Math.cos(Math.toRadians(elapsedTime*50)));
     return new Vec3(x,y,z);
   }
 
   private Vec3 getLight1Position() {
-    double elapsedTime = getSeconds()-startTime;
-    float x = 8.0f*(float)(Math.sin(Math.toRadians(elapsedTime*80)));
-    float y = 7.4f;
-    float z = 3.0f*(float)(Math.cos(Math.toRadians(elapsedTime*80)));
+    //double elapsedTime = getSeconds()-startTime;
+    float x = 2.0f;//8.0f*(float)(Math.sin(Math.toRadians(elapsedTime*80)));
+    float y = 12.0f;//7.4f;
+    float z = 2.0f;//3.0f*(float)(Math.cos(Math.toRadians(elapsedTime*80)));
     return new Vec3(x,y,z);
   }
 

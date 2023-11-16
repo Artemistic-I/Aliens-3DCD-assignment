@@ -11,12 +11,15 @@ public class Light {
   private Shader shader;
   private Camera camera;
   //private Mat4 perspective;
+  private float ambientStrength = 0.1f;
+  private float diffuseStrength = 0.4f;
+  private float specularStrength = 0.3f;
     
   public Light(GL3 gl) {
     material = new Material();
-    material.setAmbient(0.3f, 0.3f, 0.3f);
-    material.setDiffuse(0.7f, 0.7f, 0.7f);
-    material.setSpecular(0.7f, 0.7f, 0.7f);
+    material.setAmbient(ambientStrength, ambientStrength, ambientStrength);//(0.3f, 0.3f, 0.3f);
+    material.setDiffuse(diffuseStrength, diffuseStrength, diffuseStrength);//(0.7f, 0.7f, 0.7f);
+    material.setSpecular(specularStrength, specularStrength, specularStrength);//(0.7f, 0.7f, 0.7f);
     position = new Vec3(3f,2f,1f);
     model = new Mat4(1);
     

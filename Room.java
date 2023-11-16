@@ -24,7 +24,7 @@ public class Room {
     wall = new ModelMultipleLights[4];
     wall[0] = makeWall0(gl);
     wall[1] = makeWall1(gl);
-    wall[2] = makeWall2(gl);
+    //wall[2] = makeWall2(gl);
   }
 
   // There is repetion in each of the following methods 
@@ -37,7 +37,7 @@ public class Room {
     //create floor
     Mat4 modelMatrix = new Mat4(1);
     modelMatrix = Mat4.multiply(Mat4Transform.scale(size,1f,size), modelMatrix);
-    Mesh mesh = new Mesh(gl, TwoTriangles.vertices.clone(), TwoTriangles.indices.clone());
+    Mesh mesh = new Mesh(gl, TwoTriangles.verticesHorizontal.clone(), TwoTriangles.indices.clone());
     Shader shader = new Shader(gl, "shaders/vs_standard.txt", "shaders/fs_standard_m_1t.txt");
     ModelMultipleLights model = new ModelMultipleLights(name, mesh, modelMatrix, shader, material, lights, camera, t0);
     return model;
@@ -52,30 +52,30 @@ public class Room {
     modelMatrix = Mat4.multiply(Mat4Transform.scale(size,1f,size), modelMatrix);
     modelMatrix = Mat4.multiply(Mat4Transform.rotateAroundX(90), modelMatrix);
     modelMatrix = Mat4.multiply(Mat4Transform.translate(0,size*0.5f,-size*0.5f), modelMatrix);
-    Mesh mesh = new Mesh(gl, TwoTriangles.vertices.clone(), TwoTriangles.indices.clone());
+    Mesh mesh = new Mesh(gl, TwoTriangles.verticesVertical.clone(), TwoTriangles.indices.clone());
     Shader shader = new Shader(gl, "shaders/vs_standard.txt", "shaders/fs_standard_m_1t.txt");
-    ModelMultipleLights model = new ModelMultipleLights(name, mesh, modelMatrix, shader, material, lights, camera, t0);
+    ModelMultipleLights model = new ModelMultipleLights(name, mesh, modelMatrix, shader, material, lights, camera, t1);
     return model;
   }
 
-  private ModelMultipleLights makeWall2(GL3 gl) {
-    String name="wall";
-    Material material = new Material(new Vec3(0.1f, 0.5f, 0.91f), new Vec3(0.1f, 0.5f, 0.91f), new Vec3(0.3f, 0.3f, 0.3f), 4.0f);
-    // side wall
-    Mat4 modelMatrix = new Mat4(1);
-    modelMatrix = Mat4.multiply(Mat4Transform.scale(size,1f,size), modelMatrix);
-    modelMatrix = Mat4.multiply(Mat4Transform.rotateAroundY(90), modelMatrix);
-    modelMatrix = Mat4.multiply(Mat4Transform.rotateAroundZ(-90), modelMatrix);
-    modelMatrix = Mat4.multiply(Mat4Transform.translate(-size*0.5f,size*0.5f,0), modelMatrix);
-    Mesh mesh = new Mesh(gl, TwoTriangles.vertices.clone(), TwoTriangles.indices.clone());
-    Shader shader = new Shader(gl, "shaders/vs_standard.txt", "shaders/fs_standard_m_0t.txt");
-    // no texture on this model
-    ModelMultipleLights model = new ModelMultipleLights(name, mesh, modelMatrix, shader, material, lights, camera);
-    return model;
-  }
+  // private ModelMultipleLights makeWall2(GL3 gl) {
+  //   String name="wall";
+  //   Material material = new Material(new Vec3(0.1f, 0.5f, 0.91f), new Vec3(0.1f, 0.5f, 0.91f), new Vec3(0.3f, 0.3f, 0.3f), 4.0f);
+  //   // side wall
+  //   Mat4 modelMatrix = new Mat4(1);
+  //   modelMatrix = Mat4.multiply(Mat4Transform.scale(size,1f,size), modelMatrix);
+  //   modelMatrix = Mat4.multiply(Mat4Transform.rotateAroundY(90), modelMatrix);
+  //   modelMatrix = Mat4.multiply(Mat4Transform.rotateAroundZ(-90), modelMatrix);
+  //   modelMatrix = Mat4.multiply(Mat4Transform.translate(-size*0.5f,size*0.5f,0), modelMatrix);
+  //   Mesh mesh = new Mesh(gl, TwoTriangles.verticesVertical.clone(), TwoTriangles.indices.clone());
+  //   Shader shader = new Shader(gl, "shaders/vs_standard.txt", "shaders/fs_standard_m_0t.txt");
+  //   // no texture on this model
+  //   ModelMultipleLights model = new ModelMultipleLights(name, mesh, modelMatrix, shader, material, lights, camera);
+  //   return model;
+  // }
 
   public void render(GL3 gl) {
-    for (int i=0; i<3; i++) {
+    for (int i=0; i<2; i++) {
        wall[i].render(gl);
     }
     
@@ -84,7 +84,7 @@ public class Room {
   }
 
   public void dispose(GL3 gl) {
-    for (int i=0; i<3; i++) {
+    for (int i=0; i<2; i++) {
       wall[i].dispose(gl);
     }
   }
