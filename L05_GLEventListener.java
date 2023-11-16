@@ -14,6 +14,7 @@ public class L05_GLEventListener implements GLEventListener {
   
   private static final boolean DISPLAY_SHADERS = false;
   private Camera camera;
+  //private ModelMultipleLights sphere;
     
   /* The constructor is not used to initialise anything */
   public L05_GLEventListener(Camera camera) {
@@ -61,6 +62,8 @@ public class L05_GLEventListener implements GLEventListener {
     GL3 gl = drawable.getGL().getGL3();
     //container.dispose(gl);
     room.dispose(gl);
+    //sphere.dispose(gl);
+    alien1.dispose(gl);
     lights[0].dispose(gl);
     lights[1].dispose(gl);
   }
@@ -77,6 +80,7 @@ public class L05_GLEventListener implements GLEventListener {
   private Room room;
   private Container container;
   private Light[] lights = new Light[2];
+  private Alien alien1;
 
   private void loadTextures(GL3 gl) {
     textures = new TextureLibrary();
@@ -98,6 +102,15 @@ public class L05_GLEventListener implements GLEventListener {
     lights[1].setCamera(camera);
     lights[1].setPosition(getLight1Position());
 
+    alien1 = new Alien(gl, camera, lights, textures.get("container_diffuse"));
+    // String name = "sphere";
+    // Mesh mesh = new Mesh(gl, Sphere.vertices.clone(), Sphere.indices.clone());
+    // Shader shader = new Shader(gl, "shaders/vs_standard.txt", "shaders/fs_standard_m_0t.txt");
+    // Material material = new Material(new Vec3(1.0f, 0.5f, 0.31f), new Vec3(1.0f, 0.5f, 0.31f), new Vec3(0.5f, 0.5f, 0.5f), 32.0f);
+    // Mat4 modelMatrix1 = Mat4.multiply(Mat4Transform.scale(3,3,3), Mat4Transform.translate(0,0.5f,0));
+    // modelMatrix1 = Mat4.multiply(Mat4Transform.translate(0,0,0), modelMatrix1);
+    // sphere = new ModelMultipleLights(name, mesh, modelMatrix1, shader, material, lights, camera);
+
     room = new Room(gl, camera, lights, textures.get("snowyLower"), textures.get("snowyUpper"));
     //container = new Container(gl, camera, lights, textures.get("container_diffuse"), textures.get("container_specular"));
   }
@@ -114,7 +127,9 @@ public class L05_GLEventListener implements GLEventListener {
     //   container.setModelMatrix(getModelMatrix(i));
     //   container.render(gl);
     // }
-    
+    double elapsedTime = getSeconds()-startTime;
+    alien1.render(gl, elapsedTime);
+    //sphere.render(gl);
     room.render(gl);
   }
   
