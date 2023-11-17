@@ -12,7 +12,7 @@ public class Light {
   private Camera camera;
   //private Mat4 perspective;
   private float ambientStrength = 0.1f;
-  private float diffuseStrength = 0.4f;
+  private float diffuseStrength = 0.5f;
   private float specularStrength = 0.3f;
     
   public Light(GL3 gl) {

@@ -32,38 +32,30 @@ public class Alien {
         this.t0 = t0;
         sphere = makeSphere(gl);
         alienRoot = new NameNode("root");
+        float offsetX = 0.0f;
 
         //Creating nodes
-        // Mat4 m = new Mat4(1.0f);
-        // m = Mat4.multiply(Mat4Transform.translate(0,0.5f,0), m);
-        // TransformNode aboveSurfaceT = new TransformNode("aboveSurfaceT", m);
-
-        // m = Mat4.multiply(Mat4Transform.scale(3, 3, 3), new Mat4(1.0f));
-        // TransformNode scaleBodyT = new TransformNode("scaleBodyT", m);
-        // ModelNode body = new ModelNode("body", sphere);
-        
-        // ModelNode rightHand = new ModelNode("rightHand", sphere);
-        // m = Mat4.multiply(Mat4Transform.scale(0, 2, 0), new Mat4(1.0f));
-        // m = Mat4.multiply(Mat4Transform.rotateAroundZ(30), m);
-        // m = Mat4.multiply(Mat4Transform.translate(3,3,0), m);
-        // TransformNode rightHandT = new TransformNode("rightHandT", m);
-
-
-        
         SGNode lowerBranch = makeLowerBranch(sphere);
+        TransformNode translateToRightSide = new TransformNode("translateToRightSide",Mat4Transform.translate(0.35f,-0.11f,0));
+        float armAngle = -45f;
+        SGNode rightArm = makeArm(sphere, armAngle);
+        TransformNode translateToLeftSide = new TransformNode("translateToLeftSide",Mat4Transform.translate(-0.35f,-0.11f,0));
+        armAngle = 45;
+        SGNode leftArm = makeArm(sphere, armAngle);
+        
+        TransformNode translateX = new TransformNode("translateX", Mat4Transform.translate(offsetX,0,0)); 
 
         //Building the scene graph
-        alienRoot.addChild(lowerBranch);
-
-        // alienRoot.addChild(aboveSurfaceT);
-        //  aboveSurfaceT.addChild(scaleBodyT);
-        //   scaleBodyT.addChild(body);
-        //   aboveSurfaceT.addChild(rightHandT);
-        //    rightHandT.addChild(rightHand);
+        alienRoot.addChild(translateX);
+         translateX.addChild(lowerBranch);
+          lowerBranchT.addChild(translateToRightSide);
+           translateToRightSide.addChild(rightArm);
+          lowerBranchT.addChild(translateToLeftSide);
+           translateToLeftSide.addChild(leftArm);
 
         alienRoot.update();
     }
-    private TransformNode lowerBranch;
+    private TransformNode lowerBranchT;
 
     private SGNode makeLowerBranch(ModelMultipleLights sphere) {
         NameNode lowerBranchName = new NameNode("lower branch");
@@ -71,12 +63,36 @@ public class Alien {
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(rotateAllAngle));
         //rotateAll = new TransformNode("rotateAll", Mat4Transform.rotateAroundZ(rotateAllAngle));
-        lowerBranch = new TransformNode("lower branch transform", m);
+        lowerBranchT = new TransformNode("lower branch transform", m);
         ModelNode sphereNode = new ModelNode("Sphere(0)", sphere);
-        lowerBranchName.addChild(lowerBranch);
-         lowerBranch.addChild(sphereNode);
+        lowerBranchName.addChild(lowerBranchT);
+         lowerBranchT.addChild(sphereNode);
         return lowerBranchName;
     }
+    private SGNode makeArm(ModelMultipleLights sphere, float armAngle) {
+        NameNode upperBranchName = new NameNode("upper branch");
+        Mat4 m = Mat4Transform.scale(0.08f,0.6f,0.08f);
+        m = Mat4.multiply(Mat4Transform.translate(0.0f,0.5f,0), m);
+        m = Mat4.multiply(Mat4Transform.rotateAroundZ(armAngle), m);
+        
+        TransformNode upperBranch = new TransformNode("scale(1.4f,3.1f,1.4f);translate(0,0.5,0)", m);
+        ModelNode sphereNode = new ModelNode("Sphere(1)", sphere);
+        upperBranchName.addChild(upperBranch);
+          upperBranch.addChild(sphereNode);
+        return upperBranchName;
+    }
+    // private SGNode makeLeftArm(ModelMultipleLights sphere) {
+    //     NameNode upperBranchName = new NameNode("upper branch");
+    //     Mat4 m = Mat4Transform.scale(0.08f,0.6f,0.08f);
+    //     m = Mat4.multiply(Mat4Transform.translate(0.0f,0.5f,0), m);
+    //     m = Mat4.multiply(Mat4Transform.rotateAroundZ(45), m);
+        
+    //     TransformNode upperBranch = new TransformNode("scale(1.4f,3.1f,1.4f);translate(0,0.5,0)", m);
+    //     ModelNode sphereNode = new ModelNode("Sphere(1)", sphere);
+    //     upperBranchName.addChild(upperBranch);
+    //       upperBranch.addChild(sphereNode);
+    //     return upperBranchName;
+    // }
     private void updateBranches(double elapsedTime) {
         rotateAllAngle = rotateAllAngleStart*(float)Math.sin(elapsedTime);
         rotateUpperAngle = rotateUpperAngleStart*(float)Math.sin(elapsedTime*0.7f);
@@ -84,7 +100,7 @@ public class Alien {
         Mat4 m = Mat4Transform.scale(3,3,3);
         m = Mat4.multiply(m, Mat4Transform.translate(0 - offsetX,0.5f,0));
         m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(rotateAllAngle));
-        lowerBranch.setTransform(m);
+        lowerBranchT.setTransform(m);
         //rotateAll.setTransform(Mat4Transform.rotateAroundZ(rotateAllAngle));
         //rotateUpper.setTransform(Mat4Transform.rotateAroundZ(rotateUpperAngle));
         //rotateUpper2.setTransform(Mat4Transform.rotateAroundZ(rotateUpperAngle+90));

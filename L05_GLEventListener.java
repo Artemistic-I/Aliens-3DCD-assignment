@@ -19,8 +19,8 @@ public class L05_GLEventListener implements GLEventListener {
   /* The constructor is not used to initialise anything */
   public L05_GLEventListener(Camera camera) {
     this.camera = camera;
-    this.camera.setPosition(new Vec3(4f,6f,15f));
-    this.camera.setTarget(new Vec3(0f,5f,0f));
+    this.camera.setPosition(new Vec3(0f,2f,14f));
+    this.camera.setTarget(new Vec3(0f,3f,0f));
   }
   
   // ***************************************************
