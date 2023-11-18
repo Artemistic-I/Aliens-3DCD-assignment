@@ -11,7 +11,7 @@ public class Light {
   private Shader shader;
   private Camera camera;
   //private Mat4 perspective;
-  private float ambientStrength = 0.1f;
+  private float ambientStrength = 0.3f;
   private float diffuseStrength = 0.5f;
   private float specularStrength = 0.3f;
     

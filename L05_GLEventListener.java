@@ -88,10 +88,12 @@ public class L05_GLEventListener implements GLEventListener {
     textures.add(gl, "container_specular", "textures/container2_specular.jpg");
     textures.add(gl, "snowyLower", "textures/snowyLower.jpg");
     textures.add(gl, "snowyUpper", "textures/snowyUpper.jpg");
+    textures.add(gl, "jade", "textures/jade.jpg");
+    textures.add(gl, "planet", "textures/planet.jpg");
   }
 
   public void initialise(GL3 gl) {
-    createRandomNumbers();
+    //createRandomNumbers();
     loadTextures(gl);
 
     lights[0] = new Light(gl);
@@ -102,7 +104,7 @@ public class L05_GLEventListener implements GLEventListener {
     lights[1].setCamera(camera);
     lights[1].setPosition(getLight1Position());
 
-    alien1 = new Alien(gl, camera, lights, textures.get("container_diffuse"));
+    alien1 = new Alien(gl, camera, lights, textures);
     // String name = "sphere";
     // Mesh mesh = new Mesh(gl, Sphere.vertices.clone(), Sphere.indices.clone());
     // Shader shader = new Shader(gl, "shaders/vs_standard.txt", "shaders/fs_standard_m_0t.txt");
