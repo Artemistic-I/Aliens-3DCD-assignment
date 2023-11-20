@@ -19,9 +19,12 @@ public class Spotlight {
     private SGNode spotlightRoot;
     private ModelMultipleLights sphere;
 
+    private float verticalAngle = -25;
     private float rotateTopAngleStart = 0;//25;
     private float rotateTopAngle = rotateTopAngleStart;
     private TransformNode translateRotatingTop;
+    private ModelNode spotlightBulbNode;
+    private Light light;
 
     public Spotlight(GL3 gl, Camera cameraIn, Light[] lightIn) {
         this.camera = cameraIn;
@@ -32,7 +35,7 @@ public class Spotlight {
         TransformNode translateSpotlight = new TransformNode("translate spotlight", Mat4Transform.translate(-7,2.5f,2));
         SGNode rotatingTop = makeRotatingTop(sphere);
         //Mat4 m = Mat4.multiply(Mat4Transform.rotateAroundY(rotateTopAngle), Mat4Transform.translate(-0.15f, 3.1f,0));
-        Mat4 m = Mat4.multiply(Mat4Transform.translate(-0.15f, 3.1f,0), Mat4Transform.rotateAroundZ(-25));
+        Mat4 m = Mat4.multiply(Mat4Transform.translate(-0.15f, 3.1f,0), Mat4Transform.rotateAroundZ(verticalAngle));
         m = Mat4.multiply(Mat4Transform.rotateAroundY(rotateTopAngle), m);
         translateRotatingTop = new TransformNode("transform top", m);
 
@@ -47,6 +50,17 @@ public class Spotlight {
           translateRotatingTop.addChild(translateBulb);
            translateBulb.addChild(bulb);
         spotlightRoot.update();
+        //spotlight
+        light = new SpotlightLight(gl);
+        lights[2] = light;
+        light.setCamera(cameraIn);
+
+        Vec4 lightPos = Mat4.multiply(spotlightBulbNode.getWorldTransform(), new Vec4(Sphere.calculateCenter(), 1));
+        light.setPosition(lightPos.toVec3());
+        Mat4 lightDirectionTransform = Mat4.multiply(Mat4Transform.rotateAroundY(rotateTopAngle), Mat4Transform.rotateAroundZ(verticalAngle));
+        Vec3 lightDirection = Mat4.multiply(lightDirectionTransform, new Vec4(1, 0, 0, 1)).toVec3();
+        lightDirection.normalize();
+        ((SpotlightLight)light).setDirection(lightDirection);
     }
     public void render(GL3 gl, double elapsedTime) {
         //updateBranches(elapsedTime);
@@ -55,6 +69,12 @@ public class Spotlight {
         m = Mat4.multiply(Mat4Transform.rotateAroundY(rotateTopAngle), m);
         translateRotatingTop.setTransform(m);
         spotlightRoot.update();
+        Vec4 lightPos = Mat4.multiply(spotlightBulbNode.getWorldTransform(), new Vec4(Sphere.calculateCenter(), 1));
+        light.setPosition(lightPos.toVec3());
+        Mat4 lightDirectionTransform = Mat4.multiply(Mat4Transform.rotateAroundY(rotateTopAngle), Mat4Transform.rotateAroundZ(verticalAngle));
+        Vec3 lightDirection = Mat4.multiply(lightDirectionTransform, new Vec4(1, 0, 0, 1)).toVec3();
+        lightDirection.normalize();
+        ((SpotlightLight)light).setDirection(lightDirection);
         spotlightRoot.draw(gl);
     }
     private SGNode makePillar(ModelMultipleLights sphere) {
@@ -86,8 +106,12 @@ public class Spotlight {
         //Material material = new Material(new Vec3(0.3f, 0.3f, 0.3f), new Vec3(0.3f, 0.3f, 0.3f), new Vec3(0.5f, 0.5f, 0.5f), 32.0f);
         Mat4 modelMatrix = Mat4.multiply(Mat4Transform.scale(4,4,4), Mat4Transform.translate(0,0.5f,0));
         ModelMultipleLights sphere = new ModelMultipleLights(name, mesh, modelMatrix, shader, material, lights, camera);
-
-        return buildBranch(sphere, m);
+        NameNode upperBranchName = new NameNode("light bulb");
+        TransformNode upperBranch = new TransformNode("transform", m);
+        spotlightBulbNode = new ModelNode("Sphere(1)", sphere);
+        upperBranchName.addChild(upperBranch);
+          upperBranch.addChild(spotlightBulbNode);
+        return upperBranchName;
     }
     private SGNode buildBranch(ModelMultipleLights sphere, Mat4 m) {
         NameNode upperBranchName = new NameNode("upper branch");

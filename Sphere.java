@@ -1,3 +1,4 @@
+import gmaths.*;
 public final class Sphere {
   
   // ***************************************************
@@ -62,5 +63,24 @@ public final class Sphere {
     //  System.out.println(indices[i]+", "+indices[i+1]+", "+indices[i+2]);
     //}
   }
+  public static Vec3 calculateCenter() {
+    float sumX = 0.0f;
+    float sumY = 0.0f;
+    float sumZ = 0.0f;
+
+    // Sum up all x, y, and z coordinates
+    for (int i = 0; i < vertices.length; i += 8) {
+        sumX += vertices[i];
+        sumY += vertices[i + 1];
+        sumZ += vertices[i + 2];
+    }
+
+    // Calculate the average
+    float centerX = sumX / (vertices.length / 8);
+    float centerY = sumY / (vertices.length / 8);
+    float centerZ = sumZ / (vertices.length / 8);
+
+    return new Vec3(centerX, centerY, centerZ);
+}
   
 }

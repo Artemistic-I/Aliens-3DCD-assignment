@@ -66,8 +66,9 @@ public class L05_GLEventListener implements GLEventListener {
     alien1.dispose(gl);
     alien2.dispose(gl);
     spotlight.dispose(gl);
-    lights[0].dispose(gl);
-    lights[1].dispose(gl);
+    for (int i = 0; i < lights.length-1; i++) {
+      lights[i].dispose(gl);
+    }
   }
 
   // ***************************************************
@@ -81,7 +82,7 @@ public class L05_GLEventListener implements GLEventListener {
 
   private Room room;
   //private Container container;
-  private Light[] lights = new Light[2];
+  private Light[] lights = new Light[3];
   private Alien alien1, alien2;
   private Spotlight spotlight;
 
@@ -132,6 +133,7 @@ public class L05_GLEventListener implements GLEventListener {
     lights[0].render(gl);
                           // changing light position each frame
     lights[1].render(gl);
+    //lights[2].render(gl);
     
     // for (int i=0; i<100; ++i) {
     //   container.setModelMatrix(getModelMatrix(i));

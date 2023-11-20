@@ -14,6 +14,8 @@ public class Light {
   private float ambientStrength = 0.3f;
   private float diffuseStrength = 0.5f;
   private float specularStrength = 0.3f;
+
+  protected float onOff; // 1 = On ; -1 = Off
     
   public Light(GL3 gl) {
     material = new Material();
@@ -22,9 +24,20 @@ public class Light {
     material.setSpecular(specularStrength, specularStrength, specularStrength);//(0.7f, 0.7f, 0.7f);
     position = new Vec3(3f,2f,1f);
     model = new Mat4(1);
+
+    onOff = -1f; //default
     
     fillBuffers(gl);
     shader = new Shader(gl, "shaders/vs_light_01.txt", "shaders/fs_light_01.txt");
+  }
+  public void turnOn() {
+    onOff = 1f;
+  }
+  public void turnOff() {
+    onOff = -1f;
+  }
+  public float getOnOff() {
+    return onOff;
   }
   
   public void setPosition(Vec3 v) {

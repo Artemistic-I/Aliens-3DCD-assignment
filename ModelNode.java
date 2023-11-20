@@ -1,4 +1,5 @@
 import com.jogamp.opengl.*;
+import gmaths.*;
 
 public class ModelNode extends SGNode {
 
@@ -15,5 +16,7 @@ public class ModelNode extends SGNode {
       children.get(i).draw(gl);
     }
   }
-
+  public Mat4 getWorldTransform() {
+    return worldTransform;
+  }
 }
