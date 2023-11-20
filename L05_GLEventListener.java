@@ -64,6 +64,8 @@ public class L05_GLEventListener implements GLEventListener {
     room.dispose(gl);
     //sphere.dispose(gl);
     alien1.dispose(gl);
+    alien2.dispose(gl);
+    spotlight.dispose(gl);
     lights[0].dispose(gl);
     lights[1].dispose(gl);
   }
@@ -78,9 +80,10 @@ public class L05_GLEventListener implements GLEventListener {
   private TextureLibrary textures;
 
   private Room room;
-  private Container container;
+  //private Container container;
   private Light[] lights = new Light[2];
-  private Alien alien1;
+  private Alien alien1, alien2;
+  private Spotlight spotlight;
 
   private void loadTextures(GL3 gl) {
     textures = new TextureLibrary();
@@ -104,7 +107,12 @@ public class L05_GLEventListener implements GLEventListener {
     lights[1].setCamera(camera);
     lights[1].setPosition(getLight1Position());
 
-    alien1 = new Alien(gl, camera, lights, textures);
+    float alienOffsetX = -2f;
+    alien1 = new Alien(gl, camera, lights, textures, alienOffsetX);
+    alienOffsetX = 2f;
+    alien2 = new Alien(gl, camera, lights, textures, alienOffsetX);
+    spotlight = new Spotlight(gl, camera, lights);
+    
     // String name = "sphere";
     // Mesh mesh = new Mesh(gl, Sphere.vertices.clone(), Sphere.indices.clone());
     // Shader shader = new Shader(gl, "shaders/vs_standard.txt", "shaders/fs_standard_m_0t.txt");
@@ -131,6 +139,8 @@ public class L05_GLEventListener implements GLEventListener {
     // }
     double elapsedTime = getSeconds()-startTime;
     alien1.render(gl, elapsedTime);
+    alien2.render(gl, elapsedTime);
+    spotlight.render(gl, elapsedTime);
     //sphere.render(gl);
     room.render(gl);
   }
@@ -195,28 +205,28 @@ public class L05_GLEventListener implements GLEventListener {
 
 // I've used an inner class here. A separate class would be better.
 
-class Container {
+// class Container {
   
-  private ModelMultipleLights cube;
+//   private ModelMultipleLights cube;
 
-  public Container(GL3 gl, Camera camera, Light[] lights, Texture t_diffuse, Texture t_specular) {
-    String name = "container";
-    Mesh mesh = new Mesh(gl, Cube.vertices.clone(), Cube.indices.clone());
-    Shader shader = new Shader(gl, "shaders/vs_standard.txt", "shaders/fs_standard_m_2t.txt");
-    Material material = new Material(new Vec3(1.0f, 0.5f, 0.31f), new Vec3(1.0f, 0.5f, 0.31f), new Vec3(0.5f, 0.5f, 0.5f), 32.0f);
-    // diffuse and specular textures
-    cube = new ModelMultipleLights(name, mesh, new Mat4(1), shader, material, lights, camera, t_diffuse, t_specular);
-  }
+//   public Container(GL3 gl, Camera camera, Light[] lights, Texture t_diffuse, Texture t_specular) {
+//     String name = "container";
+//     Mesh mesh = new Mesh(gl, Cube.vertices.clone(), Cube.indices.clone());
+//     Shader shader = new Shader(gl, "shaders/vs_standard.txt", "shaders/fs_standard_m_2t.txt");
+//     Material material = new Material(new Vec3(1.0f, 0.5f, 0.31f), new Vec3(1.0f, 0.5f, 0.31f), new Vec3(0.5f, 0.5f, 0.5f), 32.0f);
+//     // diffuse and specular textures
+//     cube = new ModelMultipleLights(name, mesh, new Mat4(1), shader, material, lights, camera, t_diffuse, t_specular);
+//   }
 
-  public void setModelMatrix(Mat4 m) {
-    cube.setModelMatrix(m);
-  }
+//   public void setModelMatrix(Mat4 m) {
+//     cube.setModelMatrix(m);
+//   }
 
-  public void render(GL3 gl) {
-    cube.render(gl);
-  }
+//   public void render(GL3 gl) {
+//     cube.render(gl);
+//   }
 
-  public void dispose(GL3 gl) {
-    cube.dispose(gl);
-  }
-}
+//   public void dispose(GL3 gl) {
+//     cube.dispose(gl);
+//   }
+// }

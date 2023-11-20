@@ -17,25 +17,24 @@ public class Alien {
 
     private SGNode alienRoot;
 
-    private float rotateAllAngleStart = 25;
+    private float rotateAllAngleStart = 0;//25;
     private float rotateAllAngle = rotateAllAngleStart;
 
-    private float rotateUpperAngleStart = -20;
+    private float rotateUpperAngleStart = 0;//-20;
     private float rotateUpperAngle = rotateUpperAngleStart;
 
     private TransformNode rotateHead;
     private float alienSize = 2.0f;
 
-    public Alien(GL3 gl, Camera cameraIn, Light[] lightIn, TextureLibrary textures) {
+    public Alien(GL3 gl, Camera cameraIn, Light[] lightIn, TextureLibrary textures, float alienOffsetX) {
         this.camera = cameraIn;
         this.lights = lightIn;
         sphere = makeSphere(gl, textures.get("jade"));
         sphereNoTex = makeSphere(gl);
         alienRoot = new NameNode("root");
-        float offsetX = -2.0f;
 
         //Creating nodes
-        TransformNode translateX = new TransformNode("translateX", Mat4Transform.translate(offsetX,0,0));
+        TransformNode translateX = new TransformNode("translateX", Mat4Transform.translate(alienOffsetX,0,0));
         //body
         SGNode lowerBranch = makeLowerBranch(sphere);
         //right arm
@@ -166,7 +165,7 @@ public class Alien {
         m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(rotateAllAngle));
         lowerBranchT.setTransform(m);
         //update head rotation
-        rotateUpperAngle = rotateUpperAngleStart*(float)Math.sin(elapsedTime*0.9f);
+        rotateUpperAngle = rotateUpperAngleStart*(float)Math.sin(elapsedTime*2f);
         m = Mat4.multiply(Mat4Transform.translate(0, -0.07f,0), Mat4Transform.rotateAroundZ(rotateUpperAngle));
         rotateHead.setTransform(m);
         alienRoot.update(); // IMPORTANT – the scene graph has changed
@@ -196,5 +195,5 @@ public class Alien {
     }
     public void dispose(GL3 gl) {
         sphere.dispose(gl);
-      }
+    }
 }
