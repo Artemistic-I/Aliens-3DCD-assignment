@@ -1,17 +1,22 @@
+import gmaths.*;
 import java.awt.*;
 import java.awt.event.*;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.FPSAnimator;
 
-public class L05 extends JFrame {
+public class L05 extends JFrame implements ActionListener {
   
   private static final int WIDTH = 1024;
   private static final int HEIGHT = 768;
   private static final Dimension dimension = new Dimension(WIDTH, HEIGHT);
   private GLCanvas canvas;
-  private GLEventListener glEventListener;
+  private L05_GLEventListener glEventListener;
   private final FPSAnimator animator; 
 
   public static void main(String[] args) {
@@ -27,8 +32,67 @@ public class L05 extends JFrame {
     setUpCanvas();
     getContentPane().add(canvas, BorderLayout.CENTER);
     addWindowListener(new windowHandler());
+
+    JPanel p = new JPanel();
+      JButton b = new JButton("Global light 1");
+      b.addActionListener(this);
+      p.add(b);
+
+      b = new JButton("Global light 2");
+      b.addActionListener(this);
+      p.add(b);
+
+      b = new JButton("Spotlight");
+      b.addActionListener(this);
+      p.add(b);
+
+      b = new JButton("Start alien animation");
+      b.addActionListener(this);
+      p.add(b);
+
+      b = new JButton("Stop alien animation");
+      b.addActionListener(this);
+      p.add(b);
+
+      b = new JButton("rock");
+      b.addActionListener(this);
+      p.add(b);
+
+      b = new JButton("roll");
+      b.addActionListener(this);
+      p.add(b);
+      // b = new JButton("raised arms");
+      // b.addActionListener(this);
+      // p.add(b);
+    this.add(p, BorderLayout.SOUTH);
+
     animator = new FPSAnimator(canvas, 60);
     animator.start();
+  }
+  public void actionPerformed(ActionEvent e) {
+    if (e.getActionCommand().equalsIgnoreCase("global light 1")) {
+      glEventListener.switchGlobalLight1();
+    }
+    else if (e.getActionCommand().equalsIgnoreCase("global light 2")) {
+       glEventListener.switchGlobalLight2();
+    }
+    else if (e.getActionCommand().equalsIgnoreCase("spotlight")) {
+      glEventListener.switchSpotlight();
+    }
+    else if (e.getActionCommand().equalsIgnoreCase("start alien animation")) {
+      glEventListener.startAnimation();
+    }
+    else if (e.getActionCommand().equalsIgnoreCase("stop alien animation")) {
+      glEventListener.stopAnimation();
+    }
+    else if (e.getActionCommand().equalsIgnoreCase("rock")) {
+      glEventListener.rockOnlyAnimation();
+    }
+    else if (e.getActionCommand().equalsIgnoreCase("roll")) {
+      glEventListener.rollOnlyAnimation();
+    }
+    // else if(e.getActionCommand().equalsIgnoreCase("quit"))
+    //   System.exit(0);
   }
 
   private void setUpCanvas() {
@@ -41,7 +105,7 @@ public class L05 extends JFrame {
     canvas.addMouseMotionListener(new MyMouseInput(camera));
     canvas.addKeyListener(new MyKeyboardInput(camera));
   }
-
+//-----------------------------------------
   private class windowHandler extends WindowAdapter {
     public void windowClosing(WindowEvent e) {
       animator.stop();

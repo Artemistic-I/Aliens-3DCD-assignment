@@ -17,21 +17,27 @@ public class Alien {
 
     private SGNode alienRoot;
 
-    private float rotateAllAngleStart = 25;//25;
+    private float rotateAllAngleStart = 0;//25;
     private float rotateAllAngle = rotateAllAngleStart;
 
-    private float rotateUpperAngleStart = -20;//-20;
+    private float rotateUpperAngleStart = 0;//-20;
     private float rotateUpperAngle = rotateUpperAngleStart;
 
     private TransformNode rotateHead;
     private float alienSize = 2.0f;
+    private boolean isAnimated;
+    private boolean rock;
+    private boolean roll;
 
     public Alien(GL3 gl, Camera cameraIn, Light[] lightIn, TextureLibrary textures, float alienOffsetX) {
+        isAnimated = false;
         this.camera = cameraIn;
         this.lights = lightIn;
         sphere = makeSphere(gl, textures.get("jade"));
         sphereNoTex = makeSphere(gl);
         alienRoot = new NameNode("root");
+        rock = true;
+        roll = true;
 
         //Creating nodes
         TransformNode translateX = new TransformNode("translateX", Mat4Transform.translate(alienOffsetX,0,0));
@@ -46,7 +52,7 @@ public class Alien {
         armAngle = 45;
         SGNode leftArm = makeArm(sphere, armAngle);
         //head
-        Mat4 m = Mat4.multiply(Mat4Transform.translate(0, 0.36f,0), Mat4Transform.rotateAroundZ(rotateUpperAngle));
+        Mat4 m = Mat4.multiply(Mat4Transform.translate(0, -0.07f,0), Mat4Transform.rotateAroundZ(rotateUpperAngle));
         
         rotateHead = new TransformNode("rotate head", m);
         SGNode head = makeHead(sphere);
@@ -156,23 +162,90 @@ public class Alien {
         return upperBranchName;
     }
     
-    private void updateBranches(double elapsedTime) {
-        //update whole body rotation
+    // private void updateBranches(double elapsedTime) {
+    //     //update whole body rotation
+    //     rotateAllAngle = rotateAllAngleStart*(float)Math.sin(elapsedTime);
+    //     float offsetX = 0.4f*2.0f*(float)Math.PI*1.5f*rotateAllAngle/360;
+    //     Mat4 m = Mat4Transform.scale(alienSize,alienSize,alienSize);
+    //     m = Mat4.multiply(m, Mat4Transform.translate(0 - offsetX,0.5f,0));
+    //     m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(rotateAllAngle));
+    //     lowerBranchT.setTransform(m);
+    //     //update head rotation
+    //     rotateUpperAngle = rotateUpperAngleStart*(float)Math.sin(elapsedTime*2f);
+    //     m = Mat4.multiply(Mat4Transform.translate(0, -0.07f,0), Mat4Transform.rotateAroundZ(rotateUpperAngle));
+    //     rotateHead.setTransform(m);
+    //     alienRoot.update(); // IMPORTANT – the scene graph has changed
+    // }
+    private void updateRock(double elapsedTime) {
         rotateAllAngle = rotateAllAngleStart*(float)Math.sin(elapsedTime);
         float offsetX = 0.4f*2.0f*(float)Math.PI*1.5f*rotateAllAngle/360;
         Mat4 m = Mat4Transform.scale(alienSize,alienSize,alienSize);
         m = Mat4.multiply(m, Mat4Transform.translate(0 - offsetX,0.5f,0));
         m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(rotateAllAngle));
         lowerBranchT.setTransform(m);
-        //update head rotation
+        alienRoot.update();
+    }
+    private void updateRoll(double elapsedTime) {
         rotateUpperAngle = rotateUpperAngleStart*(float)Math.sin(elapsedTime*2f);
+        Mat4 m = Mat4.multiply(Mat4Transform.translate(0, -0.07f,0), Mat4Transform.rotateAroundZ(rotateUpperAngle));
+        rotateHead.setTransform(m);
+        alienRoot.update();
+    }
+    public void render(GL3 gl, double elapsedTime) {
+        if (isAnimated) {
+           //updateBranches(elapsedTime);
+           if (rock) {
+            updateRock(elapsedTime);
+           }
+           if (roll) {
+            updateRoll(elapsedTime);
+           }
+        }
+        
+        alienRoot.draw(gl);
+    }
+    public void startAnimation() {
+        isAnimated = true;
+        rock = true;
+        roll = true;
+        if (rotateAllAngle < 0.0001f && rotateAllAngle > -0.0001f) {
+            rotateAllAngleStart = 25;
+            rotateAllAngle = rotateAllAngleStart;
+            rotateUpperAngleStart = -20;
+            rotateUpperAngle = rotateUpperAngleStart;
+        }
+    }
+    public void stopAnimation() {
+        isAnimated = false;
+    }
+    public void rockOnly() {
+        isAnimated = true;
+        rock = true;
+        roll = false;
+    }
+    public void rollOnly() {
+        isAnimated = true;
+        roll = true;
+        rock = false;
+    }
+    public void resetAlien() {
+        isAnimated = false;
+        rock = true;
+        roll = true;
+        rotateAllAngleStart = 0;
+        rotateAllAngle = rotateAllAngleStart;
+        rotateUpperAngleStart = 0;
+        rotateUpperAngle = rotateUpperAngleStart;
+
+        Mat4 m = Mat4Transform.scale(alienSize,alienSize,alienSize);
+        m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+        m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(rotateAllAngle));
+        lowerBranchT.setTransform(m);
+        //update head rotation
+        //rotateUpperAngle = rotateUpperAngleStart*(float)Math.sin(elapsedTime*2f);
         m = Mat4.multiply(Mat4Transform.translate(0, -0.07f,0), Mat4Transform.rotateAroundZ(rotateUpperAngle));
         rotateHead.setTransform(m);
         alienRoot.update(); // IMPORTANT – the scene graph has changed
-    }
-    public void render(GL3 gl, double elapsedTime) {
-        updateBranches(elapsedTime);
-        alienRoot.draw(gl);
     }
     
     private ModelMultipleLights makeSphere(GL3 gl, Texture t) {

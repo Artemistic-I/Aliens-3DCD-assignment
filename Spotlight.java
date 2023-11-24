@@ -108,7 +108,7 @@ public class Spotlight {
         ModelMultipleLights sphere = new ModelMultipleLights(name, mesh, modelMatrix, shader, material, lights, camera);
         NameNode upperBranchName = new NameNode("light bulb");
         TransformNode upperBranch = new TransformNode("transform", m);
-        spotlightBulbNode = new ModelNode("Sphere(1)", sphere);
+        spotlightBulbNode = new ModelNode("spotlight", sphere);
         upperBranchName.addChild(upperBranch);
           upperBranch.addChild(spotlightBulbNode);
         return upperBranchName;

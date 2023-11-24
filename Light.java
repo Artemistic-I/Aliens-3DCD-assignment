@@ -30,6 +30,13 @@ public class Light {
     fillBuffers(gl);
     shader = new Shader(gl, "shaders/vs_light_01.txt", "shaders/fs_light_01.txt");
   }
+  public void turnOnOff() {
+    if (onOff < 0) {
+      onOff = 1f;
+    } else {
+      onOff = -1f;
+    }
+  }
   public void turnOn() {
     onOff = 1f;
   }
@@ -81,6 +88,7 @@ public class Light {
     
     shader.use(gl);
     shader.setFloatArray(gl, "mvpMatrix", mvpMatrix.toFloatArrayForGLSL());
+    shader.setFloat(gl, "onOff", onOff);
   
     gl.glBindVertexArray(vertexArrayId[0]);
     

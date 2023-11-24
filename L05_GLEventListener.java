@@ -40,7 +40,8 @@ public class L05_GLEventListener implements GLEventListener {
     gl.glEnable(GL.GL_CULL_FACE); // default is 'not enabled' so needs to be enabled
     gl.glCullFace(GL.GL_BACK);   // default is 'back', assuming CCW
     initialise(gl);
-    startTime = getSeconds();
+    startTime1 = getSeconds(); //for spotlight
+    startTime2 = getSeconds(); //for aliens
   }
   
   /* Called to indicate the drawing surface has been moved and/or resized  */
@@ -139,10 +140,11 @@ public class L05_GLEventListener implements GLEventListener {
     //   container.setModelMatrix(getModelMatrix(i));
     //   container.render(gl);
     // }
-    double elapsedTime = getSeconds()-startTime;
-    alien1.render(gl, elapsedTime);
-    alien2.render(gl, elapsedTime);
-    spotlight.render(gl, elapsedTime);
+    double elapsedTime1 = getSeconds()-startTime1;
+    double elapsedTime2 = getSeconds()-savedTime;
+    alien1.render(gl, elapsedTime2);
+    alien2.render(gl, elapsedTime2);
+    spotlight.render(gl, elapsedTime1);
     //sphere.render(gl);
     room.render(gl);
   }
@@ -167,7 +169,7 @@ public class L05_GLEventListener implements GLEventListener {
   // This method is used to set a random position for each container 
   // and a rotation based on the elapsed time.
   private Mat4 getModelMatrix(int i) {
-    double elapsedTime = getSeconds()-startTime;
+    double elapsedTime = getSeconds()-startTime1;
     Mat4 m = new Mat4(1);    
     float yAngle = (float)(elapsedTime*10*randoms[(i+637)%NUM_RANDOMS]);
     float multiplier = 12.0f;
@@ -183,7 +185,9 @@ public class L05_GLEventListener implements GLEventListener {
   /* TIME
    */ 
   
-  private double startTime;
+  private double startTime1;
+  private double startTime2;
+  private double savedTime = 0;
   
   private double getSeconds() {
     return System.currentTimeMillis()/1000.0;
@@ -202,8 +206,46 @@ public class L05_GLEventListener implements GLEventListener {
       randoms[i] = (float)Math.random();
     }
   }
-  
+  public void switchGlobalLight1() {
+    lights[0].turnOnOff();
+  }
+  public void switchGlobalLight2() {
+    lights[1].turnOnOff();
+  }
+  public void switchSpotlight() {
+    lights[2].turnOnOff();
+  }
+  public void startAnimation() {
+    startTime2 = getSeconds()-savedTime;
+    alien1.startAnimation();
+    alien2.startAnimation();
+  }
+  public void stopAnimation() {
+    alien1.stopAnimation();
+    alien2.stopAnimation();
+    double elapsedTime = getSeconds()-startTime2;
+    savedTime = elapsedTime;
+  }
+  public void resetAliens() {
+    alien1.resetAlien();
+    alien2.resetAlien();
+  }
+  public void rockOnlyAnimation() {
+    //alien1.resetAlien();
+    //alien2.resetAlien();
+
+    alien1.rockOnly();
+    alien2.rockOnly();
+  }
+  public void rollOnlyAnimation() {
+    //alien1.resetAlien();
+    //alien2.resetAlien();
+
+    alien1.rollOnly();
+    alien2.rollOnly();
+  }
 }
+
 
 // I've used an inner class here. A separate class would be better.
 

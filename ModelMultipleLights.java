@@ -153,6 +153,18 @@ public class ModelMultipleLights {
     // then render the mesh
     mesh.render(gl);
   }
+  public void renderSpotlight(GL3 gl, Mat4 modelMatrix) {
+    if (mesh_null()) {
+      System.out.println("Error: null in model render");
+      return;
+    }
+
+    Mat4 mvpMatrix = Mat4.multiply(camera.getPerspectiveMatrix(), Mat4.multiply(camera.getViewMatrix(), modelMatrix));
+    shader.use(gl);
+    shader.setFloatArray(gl, "mvpMatrix", mvpMatrix.toFloatArrayForGLSL());
+    shader.setFloat(gl, "onOff", lights[2].getOnOff());
+    mesh.render(gl);
+  }
 
   private boolean mesh_null() {
     return (mesh==null);
