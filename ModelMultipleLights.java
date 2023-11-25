@@ -17,6 +17,7 @@ public class ModelMultipleLights {
   private Light[] lights;
   private Texture diffuse;
   private Texture specular;
+  private double startTime;
 
 
   public ModelMultipleLights() {
@@ -40,6 +41,7 @@ public class ModelMultipleLights {
     this.camera = camera;
     this.diffuse = diffuse;
     this.specular = specular;
+    startTime = getSeconds();
   }
 
   public ModelMultipleLights(String name, Mesh mesh, Mat4 modelMatrix, Shader shader, Material material, Light[] lights,
@@ -96,6 +98,10 @@ public class ModelMultipleLights {
     render(gl, modelMatrix);
   }
 
+  private double getSeconds() {
+    return System.currentTimeMillis()/1000.0;
+  }
+
   // second version of render is so that modelMatrix can be overriden with a new parameter
   public void render(GL3 gl, Mat4 modelMatrix) {
     if (mesh_null()) {
@@ -148,6 +154,26 @@ public class ModelMultipleLights {
       shader.setInt(gl, "second_texture", 1);
       gl.glActiveTexture(GL.GL_TEXTURE1);
       specular.bind(gl);
+    }
+    if (name.equals("wall")) {
+      double elapsedTime = getSeconds() - startTime;
+      double t = elapsedTime*0.1;  // *0.1 slows it down a bit
+
+      float offsetY = (float)(t - Math.floor(t));
+      float offsetX = (float)(Math.sin(elapsedTime)*0.1);
+  
+      shader.setFloat(gl, "offset1", offsetX, offsetY);
+  
+      offsetY = (float)Math.sin((t - Math.floor(t))*1.5708);
+      offsetX = (float)(Math.sin(elapsedTime*1.1)*0.2);
+  
+      shader.setFloat(gl, "offset2", offsetX, offsetY);
+  
+      float temp = (float)Math.sin((t - Math.floor(t))*1.5708);
+      offsetY = temp*temp;
+      offsetX = (float)(Math.sin(elapsedTime*0.9)*0.05);
+  
+      shader.setFloat(gl, "offset3", offsetX, offsetY);
     }
 
     // then render the mesh

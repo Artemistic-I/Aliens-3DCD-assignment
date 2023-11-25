@@ -17,7 +17,7 @@ public class TextureLibrary {
   }
 
   public void add(GL3 gl, String name, String filename) {
-    Texture texture = loadTexture(gl, filename);
+    Texture texture = loadTexture(gl, filename, name);
     textures.put(name, texture);
   }
 
@@ -44,14 +44,19 @@ public class TextureLibrary {
   // }
 
   // mip-mapping is included in the below example
-  public static Texture loadTexture(GL3 gl3, String filename) {
+  public static Texture loadTexture(GL3 gl3, String filename, String name) {
     Texture t = null; 
     try {
       File f = new File(filename);
       t = (Texture)TextureIO.newTexture(f, true);
       t.bind(gl3);
-      t.setTexParameteri(gl3, GL3.GL_TEXTURE_WRAP_S, GL3.GL_CLAMP_TO_EDGE);
-      t.setTexParameteri(gl3, GL3.GL_TEXTURE_WRAP_T, GL3.GL_CLAMP_TO_EDGE); 
+      if (name.equals("snow3")) {
+        t.setTexParameteri(gl3, GL3.GL_TEXTURE_WRAP_S, GL3.GL_REPEAT);
+        t.setTexParameteri(gl3, GL3.GL_TEXTURE_WRAP_T, GL3.GL_REPEAT);
+      } else {
+        t.setTexParameteri(gl3, GL3.GL_TEXTURE_WRAP_S, GL3.GL_CLAMP_TO_EDGE);
+        t.setTexParameteri(gl3, GL3.GL_TEXTURE_WRAP_T, GL3.GL_CLAMP_TO_EDGE);
+      }
       t.setTexParameteri(gl3, GL3.GL_TEXTURE_MIN_FILTER, GL3.GL_LINEAR_MIPMAP_LINEAR);
       t.setTexParameteri(gl3, GL3.GL_TEXTURE_MAG_FILTER, GL3.GL_LINEAR);
       gl3.glGenerateMipmap(GL3.GL_TEXTURE_2D);
