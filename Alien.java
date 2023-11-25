@@ -208,7 +208,7 @@ public class Alien {
         isAnimated = true;
         rock = true;
         roll = true;
-        if (rotateAllAngle < 0.0001f && rotateAllAngle > -0.0001f) {
+        if (rotateAllAngle < 1e-6f && rotateAllAngle > -1e-6f) {
             rotateAllAngleStart = 25;
             rotateAllAngle = rotateAllAngleStart;
             rotateUpperAngleStart = -20;
@@ -219,11 +219,23 @@ public class Alien {
         isAnimated = false;
     }
     public void rockOnly() {
+        if (rotateAllAngle < 1e-6f && rotateAllAngle > -1e-6f) {
+            rotateAllAngleStart = 25;
+            rotateAllAngle = rotateAllAngleStart;
+            rotateUpperAngleStart = -20;
+            rotateUpperAngle = rotateUpperAngleStart;
+        }
         isAnimated = true;
         rock = true;
         roll = false;
     }
     public void rollOnly() {
+        if (rotateAllAngle < 1e-6f && rotateAllAngle > -1e-6f) {
+            rotateAllAngleStart = 25;
+            rotateAllAngle = rotateAllAngleStart;
+            rotateUpperAngleStart = -20;
+            rotateUpperAngle = rotateUpperAngleStart;
+        }
         isAnimated = true;
         roll = true;
         rock = false;

@@ -32,7 +32,7 @@ public class Spotlight {
         sphere = makeSphere(gl);
         spotlightRoot = new NameNode("root");
         SGNode pillar = makePillar(sphere);
-        TransformNode translateSpotlight = new TransformNode("translate spotlight", Mat4Transform.translate(-7,2.5f,2));
+        TransformNode translateSpotlight = new TransformNode("translate spotlight", Mat4Transform.translate(-10,2.5f,2));
         SGNode rotatingTop = makeRotatingTop(sphere);
         //Mat4 m = Mat4.multiply(Mat4Transform.rotateAroundY(rotateTopAngle), Mat4Transform.translate(-0.15f, 3.1f,0));
         Mat4 m = Mat4.multiply(Mat4Transform.translate(-0.15f, 3.1f,0), Mat4Transform.rotateAroundZ(verticalAngle));
@@ -124,7 +124,7 @@ public class Spotlight {
     private ModelMultipleLights makeSphere(GL3 gl) {
         String name= "sphere";
         Mesh mesh = new Mesh(gl, Sphere.vertices.clone(), Sphere.indices.clone());
-        Shader shader = new Shader(gl, "shaders/vs_standard.txt", "shaders/fs_standard_m_0t.txt");
+        Shader shader = new Shader(gl, "shaders/vs_standard.txt", "shaders/fs_standard_ms_0t.txt");
         Material material = new Material(new Vec3(0.3f, 0.3f, 0.3f), new Vec3(0.3f, 0.3f, 0.3f), new Vec3(0.5f, 0.5f, 0.5f), 32.0f);
         Mat4 modelMatrix = Mat4.multiply(Mat4Transform.scale(4,4,4), Mat4Transform.translate(0,0.5f,0));
         ModelMultipleLights sphere = new ModelMultipleLights(name, mesh, modelMatrix, shader, material, lights, camera);

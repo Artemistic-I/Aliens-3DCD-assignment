@@ -95,6 +95,11 @@ public class L05_GLEventListener implements GLEventListener {
     textures.add(gl, "snowyUpper", "textures/snowyUpper.jpg");
     textures.add(gl, "jade", "textures/jade.jpg");
     textures.add(gl, "planet", "textures/planet.jpg");
+    textures.add(gl, "snowy", "textures/snowy2.png");
+    textures.add(gl, "snowyLeft", "textures/snowyLeft.png");
+    textures.add(gl, "snowyCentre", "textures/snowyCentre.png");
+    textures.add(gl, "snowyRight", "textures/snowyRight.png");
+    textures.add(gl, "snowyFloor", "textures/snowyFloor.png");
   }
 
   public void initialise(GL3 gl) {
@@ -123,7 +128,7 @@ public class L05_GLEventListener implements GLEventListener {
     // modelMatrix1 = Mat4.multiply(Mat4Transform.translate(0,0,0), modelMatrix1);
     // sphere = new ModelMultipleLights(name, mesh, modelMatrix1, shader, material, lights, camera);
 
-    room = new Room(gl, camera, lights, textures.get("snowyLower"), textures.get("snowyUpper"));
+    room = new Room(gl, camera, lights, textures);//textures.get("snowyLower"), textures.get("snowyUpper"));
     //container = new Container(gl, camera, lights, textures.get("container_diffuse"), textures.get("container_specular"));
   }
   
@@ -231,16 +236,10 @@ public class L05_GLEventListener implements GLEventListener {
     alien2.resetAlien();
   }
   public void rockOnlyAnimation() {
-    //alien1.resetAlien();
-    //alien2.resetAlien();
-
     alien1.rockOnly();
     alien2.rockOnly();
   }
   public void rollOnlyAnimation() {
-    //alien1.resetAlien();
-    //alien2.resetAlien();
-
     alien1.rollOnly();
     alien2.rollOnly();
   }

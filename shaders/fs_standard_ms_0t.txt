@@ -7,7 +7,6 @@ in vec2 aTexCoord;
 out vec4 fragColor;
 
 uniform vec3 viewPos;
-uniform sampler2D first_texture; //diffuse
 
 struct Light {
     vec3 position;
@@ -94,7 +93,7 @@ vec3 CalcSpotLight(Light light, vec3 norm, vec3 aPos, vec3 viewDir) {
         return result;
     } else {
         // else, use ambient light so scene isn't completely dark outside the spotlight.
-        return light.ambient * texture(first_texture, aTexCoord).rgb;
+        return light.ambient * material.ambient;
     }
 }
 void main() {
