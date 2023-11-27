@@ -1,6 +1,8 @@
 import gmaths.*;
 
 import java.nio.*;
+import java.util.Map;
+
 import com.jogamp.common.nio.*;
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.util.*;
@@ -16,6 +18,7 @@ public class Alien {
     private ModelMultipleLights sphere, sphereNoTex;
 
     private SGNode alienRoot;
+    private Map<String,ModelMultipleLights> textures;
 
     private float rotateAllAngleStart = 0;//25;
     private float rotateAllAngle = rotateAllAngleStart;
@@ -33,7 +36,7 @@ public class Alien {
         isAnimated = false;
         this.camera = cameraIn;
         this.lights = lightIn;
-        sphere = makeSphere(gl, textures.get("jade"));
+        sphere = makeSphere(gl, textures.get("head diff"), textures.get("head spec"));
         sphereNoTex = makeSphere(gl);
         alienRoot = new NameNode("root");
         rock = true;
@@ -42,15 +45,15 @@ public class Alien {
         //Creating nodes
         TransformNode translateX = new TransformNode("translateX", Mat4Transform.translate(alienOffsetX,0,0));
         //body
-        SGNode lowerBranch = makeLowerBranch(sphere);
+        SGNode lowerBranch = makeLowerBranch(makeSphere(gl, textures.get("body diff"), textures.get("body spec")));
         //right arm
         TransformNode translateToRightSide = new TransformNode("translateToRightSide",Mat4Transform.translate(0.35f,-0.11f,0));
         float armAngle = -45f;
-        SGNode rightArm = makeArm(sphere, armAngle);
+        SGNode rightArm = makeArm(makeSphere(gl, textures.get("arm")), armAngle);
         //left arm
         TransformNode translateToLeftSide = new TransformNode("translateToLeftSide",Mat4Transform.translate(-0.35f,-0.11f,0));
         armAngle = 45;
-        SGNode leftArm = makeArm(sphere, armAngle);
+        SGNode leftArm = makeArm(makeSphere(gl, textures.get("arm")), armAngle);
         //head
         Mat4 m = Mat4.multiply(Mat4Transform.translate(0, -0.07f,0), Mat4Transform.rotateAroundZ(rotateUpperAngle));
         
@@ -59,29 +62,29 @@ public class Alien {
 
         m = Mat4Transform.translate(0.35f, 0.7f,0);
         TransformNode moveRightEar = new TransformNode("move right ear", m);
-        SGNode rightEar = makeEar(sphere);
+        SGNode rightEar = makeEar(makeSphere(gl, textures.get("ear"), textures.get("ear spec")));
 
         m = Mat4Transform.translate(-0.35f, 0.7f,0);
         TransformNode moveLeftEar = new TransformNode("move left ear", m);
-        SGNode leftEar = makeEar(sphere);
+        SGNode leftEar = makeEar(makeSphere(gl, textures.get("ear"), textures.get("ear spec")));
 
         m = Mat4Transform.translate(-0.05f, 0.52f,0.32f);
         TransformNode moveRightEye = new TransformNode("move right eye", m);
         Float eyeAngle = -20f;
-        SGNode rightEye = makeEye(sphere, eyeAngle);
+        SGNode rightEye = makeEye(makeSphere(gl, textures.get("eye")), eyeAngle);
 
         m = Mat4Transform.translate(0.05f, 0.52f,0.32f);
         TransformNode moveLeftEye = new TransformNode("move left eye", m);
         eyeAngle = 20f;
-        SGNode leftEye = makeEye(sphere, eyeAngle);
+        SGNode leftEye = makeEye(makeSphere(gl, textures.get("eye")), eyeAngle);
 
         m = Mat4Transform.translate(0, 0.87f,0);
         TransformNode moveAntennaStick = new TransformNode("move antenna stick", m);
-        SGNode antennaStick = makeAntennaStick(sphere);
+        SGNode antennaStick = makeAntennaStick(makeSphere(gl, textures.get("head spec")));
 
         m = Mat4Transform.translate(0, 1f,0);
         TransformNode moveAntennaBall = new TransformNode("move antenna ball", m);
-        SGNode antennaBall = makeAntennaBall(sphere);
+        SGNode antennaBall = makeAntennaBall(makeSphere(gl, textures.get("eye")));
         
 
         //Building the scene graph
@@ -260,11 +263,21 @@ public class Alien {
         alienRoot.update(); // IMPORTANT – the scene graph has changed
     }
     
+    private ModelMultipleLights makeSphere(GL3 gl, Texture t1, Texture t2) {
+        String name= "sphere";
+        Mesh mesh = new Mesh(gl, Sphere.vertices.clone(), Sphere.indices.clone());
+        Shader shader = new Shader(gl, "shaders/vs_standard.txt", "shaders/fs_standard_ms_2t.txt");
+        Material material = new Material(new Vec3(1.0f, 0.5f, 0.31f), new Vec3(1.0f, 0.5f, 0.31f), new Vec3(0.5f, 0.5f, 0.5f), 32.0f);
+        Mat4 modelMatrix = Mat4.multiply(Mat4Transform.scale(4,4,4), Mat4Transform.translate(0,0.5f,0));
+        ModelMultipleLights sphere = new ModelMultipleLights(name, mesh, modelMatrix, shader, material, lights, camera, t1, t2);
+        return sphere;
+    }
+
     private ModelMultipleLights makeSphere(GL3 gl, Texture t) {
         String name= "sphere";
         Mesh mesh = new Mesh(gl, Sphere.vertices.clone(), Sphere.indices.clone());
         Shader shader = new Shader(gl, "shaders/vs_standard.txt", "shaders/fs_standard_ms_1t.txt");
-        Material material = new Material(new Vec3(1.0f, 0.5f, 0.31f), new Vec3(1.0f, 0.5f, 0.31f), new Vec3(0.5f, 0.5f, 0.5f), 32.0f);
+        Material material = new Material(new Vec3(1.0f, 0.5f, 0.31f), new Vec3(1.0f, 0.5f, 0.31f), new Vec3(0.7f, 0.7f, 0.7f), 32.0f);
         Mat4 modelMatrix = Mat4.multiply(Mat4Transform.scale(4,4,4), Mat4Transform.translate(0,0.5f,0));
         ModelMultipleLights sphere = new ModelMultipleLights(name, mesh, modelMatrix, shader, material, lights, camera, t);
         return sphere;
@@ -273,7 +286,7 @@ public class Alien {
         String name= "sphere";
         Mesh mesh = new Mesh(gl, Sphere.vertices.clone(), Sphere.indices.clone());
         Shader shader = new Shader(gl, "shaders/vs_standard.txt", "shaders/fs_standard_ms_0t.txt");
-        Material material = new Material(new Vec3(0.1f, 0f, 0.5f), new Vec3(0.1f, 0.0f, 0.5f), new Vec3(0.5f, 0.5f, 0.5f), 32.0f);
+        Material material = new Material(new Vec3(0.1f, 0f, 0.5f), new Vec3(0.1f, 0.0f, 0.5f), new Vec3(0.7f, 0.7f, 0.7f), 32.0f);
         Mat4 modelMatrix = Mat4.multiply(Mat4Transform.scale(4,4,4), Mat4Transform.translate(0,0.5f,0));
         ModelMultipleLights sphere = new ModelMultipleLights(name, mesh, modelMatrix, shader, material, lights, camera);
         return sphere;

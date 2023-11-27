@@ -13,7 +13,7 @@ public class Light {
   //private Mat4 perspective;
   private float ambientStrength = 0.3f;
   private float diffuseStrength = 0.5f;
-  private float specularStrength = 0.3f;
+  private float specularStrength = 0.9f;
 
   protected float onOff; // 1 = On ; -1 = Off
     

@@ -61,9 +61,7 @@ public class L05_GLEventListener implements GLEventListener {
   /* Clean up memory */
   public void dispose(GLAutoDrawable drawable) {
     GL3 gl = drawable.getGL().getGL3();
-    //container.dispose(gl);
     room.dispose(gl);
-    //sphere.dispose(gl);
     alien1.dispose(gl);
     alien2.dispose(gl);
     spotlight.dispose(gl);
@@ -79,7 +77,9 @@ public class L05_GLEventListener implements GLEventListener {
    */
 
   // textures
-  private TextureLibrary textures;
+  private TextureLibrary sceneTextures;
+  private TextureLibrary alien1Textures;
+  private TextureLibrary alien2Textures;
 
   private Room room;
   //private Container container;
@@ -87,20 +87,43 @@ public class L05_GLEventListener implements GLEventListener {
   private Alien alien1, alien2;
   private Spotlight spotlight;
 
+
+  //falling snow image by Dillon Kydd is free to use under unsplash licence https://unsplash.com/photos/a-black-and-white-photo-of-snow-falling-7o7m1xCEiY8
+
+  //all other images are in public domain under C0 taken from
+  //https://polyhaven.com/textures
+  //https://polyhaven.com/a/snowy_forest_path_01
+  
   private void loadTextures(GL3 gl) {
-    textures = new TextureLibrary();
-    textures.add(gl, "container_diffuse", "textures/container2.jpg");
-    textures.add(gl, "container_specular", "textures/container2_specular.jpg");
-    textures.add(gl, "snowyLower", "textures/snowyLower.jpg");
-    textures.add(gl, "snowyUpper", "textures/snowyUpper.jpg");
-    textures.add(gl, "jade", "textures/jade.jpg");
-    textures.add(gl, "planet", "textures/planet.jpg");
-    textures.add(gl, "snowy", "textures/snowy2.png");
-    textures.add(gl, "snowyLeft", "textures/snowyLeft.png");
-    textures.add(gl, "snowyCentre", "textures/snowyCentre.png");
-    textures.add(gl, "snowyRight", "textures/snowyRight.png");
-    textures.add(gl, "snowyFloor", "textures/snowyFloor.png");
+    sceneTextures = new TextureLibrary();
+    alien1Textures = new TextureLibrary();
+    alien2Textures = new TextureLibrary();
+    //alien 1
+    alien1Textures.add(gl, "head spec", "textures/slabTiles_tex_spec.jpg");
+    alien1Textures.add(gl, "head diff", "textures/slabTiles_tex_diff.jpg");
+    alien1Textures.add(gl, "body diff", "textures/snow_tex_diff.png");
+    alien1Textures.add(gl, "body spec", "textures/snow_tex_spec.png");
+    alien1Textures.add(gl, "eye", "textures/eye.jpg");
+    alien1Textures.add(gl, "arm", "textures/arm.jpg");
+    alien1Textures.add(gl, "ear", "textures/brick.jpg");
+    alien1Textures.add(gl, "ear spec", "textures/brick_spec.jpg");
+    //alien 2
+    alien2Textures.add(gl, "head spec", "textures/head spec.jpg");
+    alien2Textures.add(gl, "head diff", "textures/head.jpg");
+    alien2Textures.add(gl, "body diff", "textures/body2.jpg");
+    alien2Textures.add(gl, "body spec", "textures/body2 spec.jpg");
+    alien2Textures.add(gl, "eye", "textures/eye2.jpg");
+    alien2Textures.add(gl, "arm", "textures/arm2.jpg");
+    alien2Textures.add(gl, "ear", "textures/ear2.jpg");
+    alien2Textures.add(gl, "ear spec", "textures/ear2 spec.jpg");
+    //scene
+    sceneTextures.add(gl, "snowyLeft", "textures/snowyLeft.png");
+    sceneTextures.add(gl, "snowyCentre", "textures/snowyCentre.png");
+    sceneTextures.add(gl, "snowyRight", "textures/snowyRight.png");
+    sceneTextures.add(gl, "snowyFloor", "textures/snowyFloor.png");
+    sceneTextures.add(gl, "snow3", "textures/snow3.jpg");
   }
+  
 
   public void initialise(GL3 gl) {
     //createRandomNumbers();
@@ -115,9 +138,9 @@ public class L05_GLEventListener implements GLEventListener {
     lights[1].setPosition(getLight1Position());
 
     float alienOffsetX = -2f;
-    alien1 = new Alien(gl, camera, lights, textures, alienOffsetX);
+    alien1 = new Alien(gl, camera, lights, alien1Textures, alienOffsetX);
     alienOffsetX = 2f;
-    alien2 = new Alien(gl, camera, lights, textures, alienOffsetX);
+    alien2 = new Alien(gl, camera, lights, alien2Textures, alienOffsetX);
     spotlight = new Spotlight(gl, camera, lights);
     
     // String name = "sphere";
@@ -128,7 +151,7 @@ public class L05_GLEventListener implements GLEventListener {
     // modelMatrix1 = Mat4.multiply(Mat4Transform.translate(0,0,0), modelMatrix1);
     // sphere = new ModelMultipleLights(name, mesh, modelMatrix1, shader, material, lights, camera);
 
-    room = new Room(gl, camera, lights, textures);//textures.get("snowyLower"), textures.get("snowyUpper"));
+    room = new Room(gl, camera, lights, sceneTextures);//textures.get("snowyLower"), textures.get("snowyUpper"));
     //container = new Container(gl, camera, lights, textures.get("container_diffuse"), textures.get("container_specular"));
   }
   
@@ -165,9 +188,9 @@ public class L05_GLEventListener implements GLEventListener {
 
   private Vec3 getLight1Position() {
     //double elapsedTime = getSeconds()-startTime;
-    float x = 2.0f;//8.0f*(float)(Math.sin(Math.toRadians(elapsedTime*80)));
-    float y = 12.0f;//7.4f;
-    float z = 2.0f;//3.0f*(float)(Math.cos(Math.toRadians(elapsedTime*80)));
+    float x = 0.0f;//8.0f*(float)(Math.sin(Math.toRadians(elapsedTime*80)));
+    float y = 10.0f;//7.4f;
+    float z = 12.0f;//3.0f*(float)(Math.cos(Math.toRadians(elapsedTime*80)));
     return new Vec3(x,y,z);
   }
 
@@ -244,32 +267,3 @@ public class L05_GLEventListener implements GLEventListener {
     alien2.rollOnly();
   }
 }
-
-
-// I've used an inner class here. A separate class would be better.
-
-// class Container {
-  
-//   private ModelMultipleLights cube;
-
-//   public Container(GL3 gl, Camera camera, Light[] lights, Texture t_diffuse, Texture t_specular) {
-//     String name = "container";
-//     Mesh mesh = new Mesh(gl, Cube.vertices.clone(), Cube.indices.clone());
-//     Shader shader = new Shader(gl, "shaders/vs_standard.txt", "shaders/fs_standard_m_2t.txt");
-//     Material material = new Material(new Vec3(1.0f, 0.5f, 0.31f), new Vec3(1.0f, 0.5f, 0.31f), new Vec3(0.5f, 0.5f, 0.5f), 32.0f);
-//     // diffuse and specular textures
-//     cube = new ModelMultipleLights(name, mesh, new Mat4(1), shader, material, lights, camera, t_diffuse, t_specular);
-//   }
-
-//   public void setModelMatrix(Mat4 m) {
-//     cube.setModelMatrix(m);
-//   }
-
-//   public void render(GL3 gl) {
-//     cube.render(gl);
-//   }
-
-//   public void dispose(GL3 gl) {
-//     cube.dispose(gl);
-//   }
-// }
