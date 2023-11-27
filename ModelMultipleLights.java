@@ -126,15 +126,15 @@ public class ModelMultipleLights {
       shader.setVec3(gl, "lights["+i+"].specular", lights[i].getMaterial().getSpecular());
       shader.setFloat(gl, "lights["+i+"].onOff", lights[i].getOnOff());
 
-      if (lights[i].getClass() == SpotlightLight.class) {
+      if (lights[i].getClass() == Spotlight.class) {
         //spotlight
-        shader.setVec3(gl, "lights["+i+"].direction", ((SpotlightLight)lights[i]).getDirection());
-        shader.setFloat(gl, "lights["+i+"].cutOff", ((SpotlightLight)lights[i]).getCutOff());
-        shader.setFloat(gl, "lights["+i+"].outerCutOff", ((SpotlightLight)lights[i]).getOuterCutOff());
+        shader.setVec3(gl, "lights["+i+"].direction", ((Spotlight)lights[i]).getDirection());
+        shader.setFloat(gl, "lights["+i+"].cutOff", ((Spotlight)lights[i]).getCutOff());
+        shader.setFloat(gl, "lights["+i+"].outerCutOff", ((Spotlight)lights[i]).getOuterCutOff());
 
-        shader.setFloat(gl, "lights["+i+"].constant", ((SpotlightLight)lights[i]).getConstant());
-        shader.setFloat(gl, "lights["+i+"].linear", ((SpotlightLight)lights[i]).getLinear());
-        shader.setFloat(gl, "lights["+i+"].quadratic", ((SpotlightLight)lights[i]).getQuadratic());
+        shader.setFloat(gl, "lights["+i+"].constant", ((Spotlight)lights[i]).getConstant());
+        shader.setFloat(gl, "lights["+i+"].linear", ((Spotlight)lights[i]).getLinear());
+        shader.setFloat(gl, "lights["+i+"].quadratic", ((Spotlight)lights[i]).getQuadratic());
       } else {
         //pointlight
         shader.setFloat(gl, "lights["+i+"].constant", -1f); // this is to identify a spotlight

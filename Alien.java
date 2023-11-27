@@ -10,25 +10,25 @@ import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.FPSAnimator;
 
-//modified L05
-public class L05 extends JFrame implements ActionListener {
+//modified L05 from ch8
+public class Alien extends JFrame implements ActionListener {
   
   private static final int WIDTH = 1024;
   private static final int HEIGHT = 768;
   private static final Dimension dimension = new Dimension(WIDTH, HEIGHT);
   private GLCanvas canvas;
-  private L05_GLEventListener glEventListener;
+  private Alien_GLEventListener glEventListener;
   private final FPSAnimator animator; 
 
   public static void main(String[] args) {
-    L05 b1 = new L05("L05");
+    Alien b1 = new Alien("Alien");
     b1.getContentPane().setPreferredSize(dimension);
     b1.pack();
     b1.setVisible(true);
     b1.canvas.requestFocusInWindow();
   }
 
-  public L05(String textForTitleBar) {
+  public Alien(String textForTitleBar) {
     super(textForTitleBar);
     setUpCanvas();
     getContentPane().add(canvas, BorderLayout.CENTER);
@@ -96,7 +96,7 @@ public class L05 extends JFrame implements ActionListener {
     canvas = new GLCanvas(glcapabilities);
     Camera camera = new Camera(Camera.DEFAULT_POSITION,
         Camera.DEFAULT_TARGET, Camera.DEFAULT_UP);
-    glEventListener = new L05_GLEventListener(camera);
+    glEventListener = new Alien_GLEventListener(camera);
     canvas.addGLEventListener(glEventListener);
     canvas.addMouseMotionListener(new MyMouseInput(camera));
     canvas.addKeyListener(new MyKeyboardInput(camera));

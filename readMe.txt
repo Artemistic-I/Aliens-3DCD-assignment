@@ -2,7 +2,7 @@
 IMPORTANT! Please wait when you run the program. It should work after a few seconds. I believe the white screen at the beginning is the result of using large number of high resolution textures.
 It takes a bit of time to load.
 
-I slightly modified gmaths package. I added an extra method to Mat4.java to multiply a Mat4 by Vec4. I needed that to set the position of spotlightLight.
+I slightly modified gmaths package. I added an extra method to Mat4.java to multiply a Mat4 by Vec4. I needed that to set the position of spotlight.
 
 falling snow image by Dillon Kydd is free to use under unsplash licence https://unsplash.com/photos/a-black-and-white-photo-of-snow-falling-7o7m1xCEiY8
 all other images are in public domain under C0 taken from
@@ -23,6 +23,6 @@ List of new files excluding textures:
     3 new java files:
         AlienModel.java
         Spotlight.java
-        SpotlightLight.java
+        SpotlightModel.java
 
 Other files are modified or unchanged.

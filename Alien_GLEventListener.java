@@ -10,12 +10,12 @@ import com.jogamp.opengl.util.texture.awt.*;
 import com.jogamp.opengl.util.texture.spi.JPEGImage;
 
 //heavily modified
-public class L05_GLEventListener implements GLEventListener {
+public class Alien_GLEventListener implements GLEventListener {
   
   private static final boolean DISPLAY_SHADERS = false;
   private Camera camera;
     
-  public L05_GLEventListener(Camera camera) {
+  public Alien_GLEventListener(Camera camera) {
     this.camera = camera;
     this.camera.setPosition(new Vec3(0f,2f,14f));
     this.camera.setTarget(new Vec3(0f,3f,0f));
@@ -74,7 +74,7 @@ public class L05_GLEventListener implements GLEventListener {
   private AlienModel alien1, alien2;
   private Room room;
   private Light[] lights = new Light[3];
-  private Spotlight spotlight;
+  private SpotlightModel spotlight;
 
 
   //falling snow image by Dillon Kydd is free to use under unsplash licence https://unsplash.com/photos/a-black-and-white-photo-of-snow-falling-7o7m1xCEiY8
@@ -129,7 +129,7 @@ public class L05_GLEventListener implements GLEventListener {
     alien1 = new AlienModel(gl, camera, lights, alien1Textures, alienOffsetX);
     alienOffsetX = 2f;
     alien2 = new AlienModel(gl, camera, lights, alien2Textures, alienOffsetX);
-    spotlight = new Spotlight(gl, camera, lights);
+    spotlight = new SpotlightModel(gl, camera, lights);
 
     room = new Room(gl, camera, lights, sceneTextures);
   }

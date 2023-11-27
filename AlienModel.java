@@ -15,7 +15,7 @@ import com.jogamp.opengl.util.texture.spi.JPEGImage;
 /**
      * This class models an alien object and its animation
      * 
-     * @author Artem Iakovlev
+     * @author Artem Iakovlev aiakolev1@sheffield.ac.uk
      * @param gl
      * @param cameraIn
      * @param lightIn
