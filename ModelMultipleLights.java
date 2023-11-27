@@ -6,6 +6,7 @@ import com.jogamp.opengl.util.texture.*;
 import com.jogamp.opengl.util.texture.awt.*;
 import com.jogamp.opengl.util.texture.spi.JPEGImage;
 
+//modified
 public class ModelMultipleLights {
 
   private String name;
@@ -102,7 +103,7 @@ public class ModelMultipleLights {
     return System.currentTimeMillis()/1000.0;
   }
 
-  // second version of render is so that modelMatrix can be overriden with a new parameter
+  //modified
   public void render(GL3 gl, Mat4 modelMatrix) {
     if (mesh_null()) {
       System.out.println("Error: null in model render");
@@ -157,7 +158,7 @@ public class ModelMultipleLights {
     }
     if (name.equals("wall")) {
       double elapsedTime = getSeconds() - startTime;
-      double t = elapsedTime*0.1;  // *0.1 slows it down a bit
+      double t = elapsedTime*0.1;
 
       float offsetY = (float)(t - Math.floor(t));
       float offsetX = (float)(Math.sin(elapsedTime)*0.1);
@@ -179,6 +180,7 @@ public class ModelMultipleLights {
     // then render the mesh
     mesh.render(gl);
   }
+  //new
   public void renderSpotlight(GL3 gl, Mat4 modelMatrix) {
     if (mesh_null()) {
       System.out.println("Error: null in model render");

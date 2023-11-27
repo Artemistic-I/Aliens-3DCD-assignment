@@ -3,6 +3,7 @@ import java.nio.*;
 import com.jogamp.common.nio.*;
 import com.jogamp.opengl.*;
 
+//unchanged
 public class Mesh {
   
   private float[] vertices;

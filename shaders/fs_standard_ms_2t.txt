@@ -1,4 +1,5 @@
 #version 330 core
+//Parts of the code are taken from Joey de Vries's Tutorial on lightcasters
 
 in vec3 aPos;
 in vec3 aNormal;

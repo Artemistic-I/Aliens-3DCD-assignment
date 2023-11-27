@@ -1,4 +1,5 @@
 import gmaths.*;
+//added a new method
 public final class Sphere {
   
   // ***************************************************
@@ -63,6 +64,7 @@ public final class Sphere {
     //  System.out.println(indices[i]+", "+indices[i+1]+", "+indices[i+2]);
     //}
   }
+  //new
   public static Vec3 calculateCenter() {
     float sumX = 0.0f;
     float sumY = 0.0f;

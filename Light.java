@@ -2,7 +2,8 @@ import gmaths.*;
 import java.nio.*;
 import com.jogamp.common.nio.*;
 import com.jogamp.opengl.*;
-  
+
+//modified
 public class Light {
   
   private Material material;
@@ -10,7 +11,6 @@ public class Light {
   private Mat4 model;
   private Shader shader;
   private Camera camera;
-  //private Mat4 perspective;
   private float ambientStrength = 0.3f;
   private float diffuseStrength = 0.5f;
   private float specularStrength = 0.9f;
@@ -19,17 +19,18 @@ public class Light {
     
   public Light(GL3 gl) {
     material = new Material();
-    material.setAmbient(ambientStrength, ambientStrength, ambientStrength);//(0.3f, 0.3f, 0.3f);
-    material.setDiffuse(diffuseStrength, diffuseStrength, diffuseStrength);//(0.7f, 0.7f, 0.7f);
-    material.setSpecular(specularStrength, specularStrength, specularStrength);//(0.7f, 0.7f, 0.7f);
+    material.setAmbient(ambientStrength, ambientStrength, ambientStrength);
+    material.setDiffuse(diffuseStrength, diffuseStrength, diffuseStrength);
+    material.setSpecular(specularStrength, specularStrength, specularStrength);
     position = new Vec3(3f,2f,1f);
     model = new Mat4(1);
 
-    onOff = -1f; //default
+    onOff = -1f; //by default global lights are off
     
     fillBuffers(gl);
     shader = new Shader(gl, "shaders/vs_light_01.txt", "shaders/fs_light_01.txt");
   }
+  //new methods-------
   public void turnOnOff() {
     if (onOff < 0) {
       onOff = 1f;
@@ -46,7 +47,7 @@ public class Light {
   public float getOnOff() {
     return onOff;
   }
-  
+  //-------------------
   public void setPosition(Vec3 v) {
     position.x = v.x;
     position.y = v.y;
@@ -75,11 +76,8 @@ public class Light {
     this.camera = camera;
   }
   
-  /*public void setPerspective(Mat4 perspective) {
-    this.perspective = perspective;
-  }*/
-  
-  public void render(GL3 gl) { //, Mat4 perspective, Mat4 view) {
+  //modified
+  public void render(GL3 gl) {
     Mat4 model = new Mat4(1);
     model = Mat4.multiply(Mat4Transform.scale(0.3f,0.3f,0.3f), model);
     model = Mat4.multiply(Mat4Transform.translate(position), model);

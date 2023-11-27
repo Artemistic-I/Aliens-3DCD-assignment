@@ -2,6 +2,7 @@ import gmaths.*;
 import java.util.ArrayList;
 import com.jogamp.opengl.*;
 
+//unchanged
 public class SGNode {
 
   protected String name;

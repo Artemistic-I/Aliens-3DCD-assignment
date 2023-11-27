@@ -6,7 +6,7 @@ import gmaths.*;
  * @author    Dr Steve Maddock
  * @version   1.0 (15/10/2017)
  */
-
+//unchanged
 public class Material {
 
   public static final Vec3 DEFAULT_AMBIENT = new Vec3(0.2f, 0.2f, 0.2f);

@@ -8,6 +8,7 @@ import com.jogamp.opengl.*;
 
 import com.jogamp.opengl.util.texture.*;
 
+//slightly modified
 public class TextureLibrary {
   
   private Map<String,Texture> textures;
@@ -43,14 +44,14 @@ public class TextureLibrary {
   //   return t;
   // }
 
-  // mip-mapping is included in the below example
+  //modified
   public static Texture loadTexture(GL3 gl3, String filename, String name) {
     Texture t = null; 
     try {
       File f = new File(filename);
       t = (Texture)TextureIO.newTexture(f, true);
       t.bind(gl3);
-      if (name.equals("snow3")) {
+      if (name.equals("snow3")) { //setting specific texture parameters for snow animation
         t.setTexParameteri(gl3, GL3.GL_TEXTURE_WRAP_S, GL3.GL_REPEAT);
         t.setTexParameteri(gl3, GL3.GL_TEXTURE_WRAP_T, GL3.GL_REPEAT);
       } else {

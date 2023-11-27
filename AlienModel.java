@@ -12,7 +12,17 @@ import com.jogamp.opengl.util.texture.*;
 import com.jogamp.opengl.util.texture.awt.*;
 import com.jogamp.opengl.util.texture.spi.JPEGImage;
 
-public class Alien {
+/**
+     * This class models an alien object and its animation
+     * 
+     * @author Artem Iakovlev
+     * @param gl
+     * @param cameraIn
+     * @param lightIn
+     * @param textures
+     * @param alienOffsetX
+*/
+public class AlienModel {
     private Camera camera;
     private Light[] lights;
     private ModelMultipleLights sphere, sphereNoTex;
@@ -32,7 +42,7 @@ public class Alien {
     private boolean rock;
     private boolean roll;
 
-    public Alien(GL3 gl, Camera cameraIn, Light[] lightIn, TextureLibrary textures, float alienOffsetX) {
+    public AlienModel(GL3 gl, Camera cameraIn, Light[] lightIn, TextureLibrary textures, float alienOffsetX) {
         isAnimated = false;
         this.camera = cameraIn;
         this.lights = lightIn;

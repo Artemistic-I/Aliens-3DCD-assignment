@@ -3,6 +3,12 @@ import java.nio.*;
 import com.jogamp.common.nio.*;
 import com.jogamp.opengl.*;
 
+   /**
+     * This class models the actual light from the spotlight. (Not actually using its superclass draw function
+     * because it is part of the hierarchy in Spotlight class.)
+     * @author Artem Iakovlev
+     * @param gl
+     */
 public class SpotlightLight extends Light {
 
     private Vec3 direction; //to be set
@@ -14,6 +20,7 @@ public class SpotlightLight extends Light {
     private float linear;
     private float quadratic;
 
+ 
     public SpotlightLight(GL3 gl) {
         super(gl);
         cutOff = (float)Math.cos(12.5f * Math.PI / 180);

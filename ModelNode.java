@@ -10,6 +10,7 @@ public class ModelNode extends SGNode {
     model = m; 
   }
 
+  //modified slightly
   public void draw(GL3 gl) {
     if (name.equals("spotlight")) {
       model.renderSpotlight(gl, worldTransform);
@@ -20,6 +21,7 @@ public class ModelNode extends SGNode {
       children.get(i).draw(gl);
     }
   }
+  //new: a getter method used in setting spotlightLight's position
   public Mat4 getWorldTransform() {
     return worldTransform;
   }

@@ -1,5 +1,4 @@
 import gmaths.*;
-
 import java.nio.*;
 import com.jogamp.common.nio.*;
 import com.jogamp.opengl.*;
@@ -10,13 +9,12 @@ import com.jogamp.opengl.util.texture.*;
 import com.jogamp.opengl.util.texture.awt.*;
 import com.jogamp.opengl.util.texture.spi.JPEGImage;
 
+//heavily modified
 public class L05_GLEventListener implements GLEventListener {
   
   private static final boolean DISPLAY_SHADERS = false;
   private Camera camera;
-  //private ModelMultipleLights sphere;
     
-  /* The constructor is not used to initialise anything */
   public L05_GLEventListener(Camera camera) {
     this.camera = camera;
     this.camera.setPosition(new Vec3(0f,2f,14f));
@@ -71,20 +69,11 @@ public class L05_GLEventListener implements GLEventListener {
   }
 
   // ***************************************************
-  /* THE SCENE
-   * Now define all the methods to handle the scene.
-   * This will be added to in later examples.
-   */
-
-  // textures
-  private TextureLibrary sceneTextures;
-  private TextureLibrary alien1Textures;
-  private TextureLibrary alien2Textures;
-
+  /* THE SCENE */
+  private TextureLibrary sceneTextures, alien1Textures, alien2Textures;
+  private AlienModel alien1, alien2;
   private Room room;
-  //private Container container;
   private Light[] lights = new Light[3];
-  private Alien alien1, alien2;
   private Spotlight spotlight;
 
 
@@ -126,7 +115,6 @@ public class L05_GLEventListener implements GLEventListener {
   
 
   public void initialise(GL3 gl) {
-    //createRandomNumbers();
     loadTextures(gl);
 
     lights[0] = new Light(gl);
@@ -138,46 +126,28 @@ public class L05_GLEventListener implements GLEventListener {
     lights[1].setPosition(getLight1Position());
 
     float alienOffsetX = -2f;
-    alien1 = new Alien(gl, camera, lights, alien1Textures, alienOffsetX);
+    alien1 = new AlienModel(gl, camera, lights, alien1Textures, alienOffsetX);
     alienOffsetX = 2f;
-    alien2 = new Alien(gl, camera, lights, alien2Textures, alienOffsetX);
+    alien2 = new AlienModel(gl, camera, lights, alien2Textures, alienOffsetX);
     spotlight = new Spotlight(gl, camera, lights);
-    
-    // String name = "sphere";
-    // Mesh mesh = new Mesh(gl, Sphere.vertices.clone(), Sphere.indices.clone());
-    // Shader shader = new Shader(gl, "shaders/vs_standard.txt", "shaders/fs_standard_m_0t.txt");
-    // Material material = new Material(new Vec3(1.0f, 0.5f, 0.31f), new Vec3(1.0f, 0.5f, 0.31f), new Vec3(0.5f, 0.5f, 0.5f), 32.0f);
-    // Mat4 modelMatrix1 = Mat4.multiply(Mat4Transform.scale(3,3,3), Mat4Transform.translate(0,0.5f,0));
-    // modelMatrix1 = Mat4.multiply(Mat4Transform.translate(0,0,0), modelMatrix1);
-    // sphere = new ModelMultipleLights(name, mesh, modelMatrix1, shader, material, lights, camera);
 
-    room = new Room(gl, camera, lights, sceneTextures);//textures.get("snowyLower"), textures.get("snowyUpper"));
-    //container = new Container(gl, camera, lights, textures.get("container_diffuse"), textures.get("container_specular"));
+    room = new Room(gl, camera, lights, sceneTextures);
   }
   
   public void render(GL3 gl) {
     gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
-                          // changing light position each frame
     lights[0].render(gl);
-                          // changing light position each frame
     lights[1].render(gl);
-    //lights[2].render(gl);
     
-    // for (int i=0; i<100; ++i) {
-    //   container.setModelMatrix(getModelMatrix(i));
-    //   container.render(gl);
-    // }
     double elapsedTime1 = getSeconds()-startTime1;
     double elapsedTime2 = getSeconds()-savedTime;
     alien1.render(gl, elapsedTime2);
     alien2.render(gl, elapsedTime2);
     spotlight.render(gl, elapsedTime1);
-    //sphere.render(gl);
     room.render(gl);
   }
   
-  // The light's position is continually being changed, so needs to be calculated for each frame.
   private Vec3 getLight0Position() {
     //double elapsedTime = getSeconds()-startTime;
     float x = -2.0f;//8.0f*(float)(Math.sin(Math.toRadians(elapsedTime*50)));
@@ -194,25 +164,9 @@ public class L05_GLEventListener implements GLEventListener {
     return new Vec3(x,y,z);
   }
 
-  // This method is used to set a random position for each container 
-  // and a rotation based on the elapsed time.
-  private Mat4 getModelMatrix(int i) {
-    double elapsedTime = getSeconds()-startTime1;
-    Mat4 m = new Mat4(1);    
-    float yAngle = (float)(elapsedTime*10*randoms[(i+637)%NUM_RANDOMS]);
-    float multiplier = 12.0f;
-    float x = multiplier*randoms[i%NUM_RANDOMS] - multiplier*0.5f;
-    float y = 0.5f+ (multiplier*0.5f) + multiplier*randoms[(i+137)%NUM_RANDOMS] - multiplier*0.5f;
-    float z = multiplier*randoms[(i+563)%NUM_RANDOMS] - multiplier*0.5f;
-    m = Mat4.multiply(m, Mat4Transform.translate(x,y,z));
-    m = Mat4.multiply(m, Mat4Transform.rotateAroundY(yAngle));
-    return m;
-  }
-  
     // ***************************************************
   /* TIME
-   */ 
-  
+   */
   private double startTime1;
   private double startTime2;
   private double savedTime = 0;
@@ -221,19 +175,6 @@ public class L05_GLEventListener implements GLEventListener {
     return System.currentTimeMillis()/1000.0;
   }
   
-    // ***************************************************
-  /* An array of random numbers
-   */ 
-  
-  private int NUM_RANDOMS = 1000;
-  private float[] randoms;
-  
-  private void createRandomNumbers() {
-    randoms = new float[NUM_RANDOMS];
-    for (int i=0; i<NUM_RANDOMS; ++i) {
-      randoms[i] = (float)Math.random();
-    }
-  }
   public void switchGlobalLight1() {
     lights[0].turnOnOff();
   }

@@ -2,6 +2,8 @@ import gmaths.*;
 import java.awt.event.*;
 import com.jogamp.opengl.awt.GLCanvas;
 
+
+//unchanged I think
 public class Camera {
   
   public enum CameraType {X, Z};

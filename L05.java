@@ -10,6 +10,7 @@ import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.FPSAnimator;
 
+//modified L05
 public class L05 extends JFrame implements ActionListener {
   
   private static final int WIDTH = 1024;
@@ -61,9 +62,6 @@ public class L05 extends JFrame implements ActionListener {
       b = new JButton("roll");
       b.addActionListener(this);
       p.add(b);
-      // b = new JButton("raised arms");
-      // b.addActionListener(this);
-      // p.add(b);
     this.add(p, BorderLayout.SOUTH);
 
     animator = new FPSAnimator(canvas, 60);
@@ -91,8 +89,6 @@ public class L05 extends JFrame implements ActionListener {
     else if (e.getActionCommand().equalsIgnoreCase("roll")) {
       glEventListener.rollOnlyAnimation();
     }
-    // else if(e.getActionCommand().equalsIgnoreCase("quit"))
-    //   System.exit(0);
   }
 
   private void setUpCanvas() {

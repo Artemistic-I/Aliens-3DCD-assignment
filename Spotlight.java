@@ -10,7 +10,10 @@ import com.jogamp.opengl.util.texture.*;
 import com.jogamp.opengl.util.texture.awt.*;
 import com.jogamp.opengl.util.texture.spi.JPEGImage;
 
-
+/**
+ * This class models a spotlight hierarchical object
+ * @author Artem Iakovlev
+ */
 public class Spotlight {
     private Camera camera;
     private Light[] lights;

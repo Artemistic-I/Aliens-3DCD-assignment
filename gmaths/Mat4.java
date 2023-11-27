@@ -70,6 +70,8 @@ public class Mat4 {   // row column formulation
     }
     return result;
   }
+  
+  //This extra method is the only modification I made to the gmath package
   //-------------------------------------------v
   public static Vec4 multiply(Mat4 matrix, Vec4 vector) {
     float[] result = new float[4];
@@ -82,6 +84,7 @@ public class Mat4 {   // row column formulation
     return new Vec4(result[0], result[1], result[2], result[3]);
 }
 //---------------------------------------------^
+
   // See https://www.geometrictools.com/Documentation/LaplaceExpansionTheorem.pdf
   public static Mat4 inverse(Mat4 m) {
     float s0 = m.values[0][0] * m.values[1][1] - m.values[1][0] * m.values[0][1];
